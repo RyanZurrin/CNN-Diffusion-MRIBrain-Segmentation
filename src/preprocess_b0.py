@@ -21,8 +21,8 @@ def process_trainingdata(dwib0_arr):
             a predefined range [0,1] '''
         p = np.percentile(imgF32, 99)
         imgF32_sagittal = imgF32 / p 			          # sagittal view
-        imgF32_sagittal[ imgF32_sagittal < 0 ] =  sys.float_info.epsilon	      
-        imgF32_sagittal[ imgF32_sagittal > 1 ] = 1 		  
+        imgF32_sagittal[ imgF32_sagittal < 0 ] =  sys.float_info.epsilon
+        imgF32_sagittal[ imgF32_sagittal > 1 ] = 1
         imgF32_coronal = np.swapaxes(imgF32_sagittal,0,1) # coronal view
         imgF32_axial = np.swapaxes(imgF32_sagittal,0,2)   # Axial view
 
@@ -31,7 +31,7 @@ def process_trainingdata(dwib0_arr):
         imgF32_coronal.tofile(coronal_f_handle)
         imgF32_axial.tofile(axial_f_handle)
 
-        print('Case ' + str(count) + ' done')
+        print(f'Case {str(count)} done')
         count = count + 1
 
     # Closing the binary file
@@ -72,14 +72,14 @@ if args.b0:
 
 storage = path.dirname(dwib0_arr[0])
 # dwi cases will be written to the below binary files
-sagittal_bin_file = storage + '/sagittal-binary-dwi'
-coronal_bin_file = storage + '/coronal-binary-dwi'
-axial_bin_file = storage + '/axial-binary-dwi'
+sagittal_bin_file = f'{storage}/sagittal-binary-dwi'
+coronal_bin_file = f'{storage}/coronal-binary-dwi'
+axial_bin_file = f'{storage}/axial-binary-dwi'
 
 # The above binary files will be converted to 3D numpy array
-sagittal_trainingdata = storage + '/sagittal-traindata-dwi.npy'
-coronal_trainingdata = storage + '/coronal-traindata-dwi.npy'
-axial_trainingdata = storage + '/axial-traindata-dwi.npy'
+sagittal_trainingdata = f'{storage}/sagittal-traindata-dwi.npy'
+coronal_trainingdata = f'{storage}/coronal-traindata-dwi.npy'
+axial_trainingdata = f'{storage}/axial-traindata-dwi.npy'
 
 # Open the binary file for writing
 sagittal_f_handle = open(sagittal_bin_file, 'wb')

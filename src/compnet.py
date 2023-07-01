@@ -581,8 +581,8 @@ def train_model(data_params, train_params, common_params):
 
     training_data_folder = data_params['data_dir'].rstrip('/')
 
-    train_x = training_data_folder + '/' + data_params['train_data_file']
-    train_y = training_data_folder + '/' + data_params['train_label_file']
+    train_x = f'{training_data_folder}/' + data_params['train_data_file']
+    train_y = f'{training_data_folder}/' + data_params['train_label_file']
 
     model = Comp_U_Net(input_shape=(256,256,1), learn_rate=train_params['learning_rate'])
     # print(model.summary())

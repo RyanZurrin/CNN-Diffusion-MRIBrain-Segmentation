@@ -12,8 +12,8 @@ def process_trainingdata(mask_arr):
     for b0_mask in mask_arr:
         img = nib.load(b0_mask)
         imgU8_sagittal = img.get_data().astype(np.uint8) # sagittal view
-        imgU8_sagittal[ imgU8_sagittal < 0 ] = 0        
-        imgU8_sagittal[ imgU8_sagittal > 1 ] = 1        
+        imgU8_sagittal[ imgU8_sagittal < 0 ] = 0
+        imgU8_sagittal[ imgU8_sagittal > 1 ] = 1
         imgU8_coronal = np.swapaxes(imgU8_sagittal,0,1) # coronal view
         imgU8_axial = np.swapaxes(imgU8_sagittal,0,2)   # Axial view
 
@@ -22,7 +22,7 @@ def process_trainingdata(mask_arr):
         imgU8_coronal.tofile(coronal_f_handle)
         imgU8_axial.tofile(axial_f_handle)
 
-        print('Case ' + str(count) + ' done')
+        print(f'Case {str(count)} done')
         count = count + 1
 
     # Closing the binary file
@@ -65,14 +65,14 @@ if args.mask:
 storage = path.dirname(mask_arr[0])
 
 # dwi cases mask will be written to the below binary files
-sagittal_bin_file = storage + '/sagittal-binary-mask'
-coronal_bin_file = storage + '/coronal-binary-mask'
-axial_bin_file = storage + '/axial-binary-mask'
+sagittal_bin_file = f'{storage}/sagittal-binary-mask'
+coronal_bin_file = f'{storage}/coronal-binary-mask'
+axial_bin_file = f'{storage}/axial-binary-mask'
 
 # The above binary files will be converted to 3D numpy array
-sagittal_trainingdata = storage + '/sagittal-traindata-mask.npy'
-coronal_trainingdata = storage + '/coronal-traindata-mask.npy'
-axial_trainingdata = storage + '/axial-traindata-mask.npy'
+sagittal_trainingdata = f'{storage}/sagittal-traindata-mask.npy'
+coronal_trainingdata = f'{storage}/coronal-traindata-mask.npy'
+axial_trainingdata = f'{storage}/axial-traindata-mask.npy'
 
 # Open the binary file for writing
 sagittal_f_handle = open(sagittal_bin_file, 'wb')

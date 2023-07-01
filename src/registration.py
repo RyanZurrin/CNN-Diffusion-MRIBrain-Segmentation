@@ -13,16 +13,16 @@ def ANTS_rigid_body_trans(b0_nii, result, mask_file, reference):
     print("Performing ants rigid body transformation...")
     input_file = b0_nii
     case_name = os.path.basename(input_file)
-    output_name = case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)] + '-'
+    output_name = f'{case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)]}-'
     output_file = os.path.join(os.path.dirname(input_file), output_name)
 
-    trans_matrix = "antsRegistrationSyNQuick.sh -d 3 -f " + reference + " -m " + input_file + " -t r -o " + output_file
+    trans_matrix = f"antsRegistrationSyNQuick.sh -d 3 -f {reference} -m {input_file} -t r -o {output_file}"
     output1 = subprocess.check_output(trans_matrix, shell=True)
 
-    omat_name = case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)] + '-0GenericAffine.mat'
+    omat_name = f'{case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)]}-0GenericAffine.mat'
     omat_file = os.path.join(os.path.dirname(input_file), omat_name)
 
-    output_name = case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)] + '-Warped.nii.gz'
+    output_name = f'{case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)]}-Warped.nii.gz'
     transformed_file = os.path.join(os.path.dirname(input_file), output_name)
 
     result.append((transformed_file, omat_file, mask_file))
@@ -86,7 +86,7 @@ with Manager() as manager:
                                                              result, mask_list[i], reference))
         ants_jobs.append(p_ants)
         p_ants.start()
-        
+
     for process in ants_jobs:
         process.join()
 
@@ -106,9 +106,8 @@ for i in range(0, len(transformed_cases)):
 
     input_file = transformed_cases[i]
     case_name = os.path.basename(input_file)
-    output_name = case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)] + '-mask.nii.gz'
+    output_name = f'{case_name[:len(case_name) - (len(SUFFIX_NIFTI_GZ) + 1)]}-mask.nii.gz'
     output_file = os.path.join(os.path.dirname(masks_new_list[i]), output_name)
-    apply_mask_trans = "antsApplyTransforms -d 3 -i " + masks_new_list[i] + " -r " + input_file + " -o " \
-                            + output_file + " --transform [" + omat_list[i] + "]"
+    apply_mask_trans = f"antsApplyTransforms -d 3 -i {masks_new_list[i]} -r {input_file} -o {output_file} --transform [{omat_list[i]}]"
 
     output2 = subprocess.check_output(apply_mask_trans, shell=True)
